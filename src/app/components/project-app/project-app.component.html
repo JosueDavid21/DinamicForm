@@ -1,0 +1,79 @@
+<div>
+  <div style="text-align: center;">
+    <h1>Dynamic Form inside to Table</h1>
+  </div>
+  <form [formGroup]="detailFirstLevelForm">
+    <div>
+      <p-table [value]="firstLevelDetail.controls" [scrollable]="true" class="firstTable" scrollHeight="80vh"
+        dataKey="id" styleClass="prime-datatable-wrapper">
+        <ng-template pTemplate="header">
+          <tr class="text-lg">
+            <th class="w-1"></th>
+            <th class="w-6">Name</th>
+            <th class="w-4">State</th>
+            <th>
+              <div>
+                <p-button type="button" label="Phase" icon="pi pi-plus" [raised]="true" class="m-1"
+                  (click)="addFirstLevelDetail()" />
+              </div>
+            </th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-firstLevelDetail let-index="rowIndex" let-expanded="expanded">
+          <ng-container formArrayName="planDetail">
+            <tr [formGroupName]="index">
+              <td class="w-3rem">
+                <p-button type="button" pRipple [pRowToggler]="firstLevelDetail" [rounded]="true" [text]="true" [raised]="true"
+                  [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+              </td>
+              <td>
+                <input pInputText type="text" class="form-control form-control-sm" formControlName="name" />
+              </td>
+              <td>
+                <p-dropdown [options]="['In Progress', 'Finished', 'Approved']" class="front" formControlName="state"
+                  placeholder="Select a State" />
+              </td>
+              <td>
+                <p-button icon="pi pi-trash" type="button" [rounded]="true" [text]="true" [raised]="true" severity="danger"
+                  (click)="deleteFirstLevelDetail(index)" />
+                <p-button icon="pi pi-plus" type="button" [rounded]="true" [text]="true" [raised]="true" severity="info"
+                  (click)="addSecondLevelDetail(index)" />
+              </td>
+            </tr>
+          </ng-container>
+        </ng-template>
+
+        <ng-template pTemplate="rowexpansion" let-firstLevelDetail let-rowIndex="rowIndex">
+          <ng-container formArrayName="planDetail">
+            <tr [formGroupName]="rowIndex">
+              <td colspan="4">
+                <p-table [value]="detailSecondLevel(rowIndex).controls" dataKey=(rowIndex) class="secondTable"
+                  [scrollable]="false">
+                  <ng-template pTemplate="body" let-planDetail let-subIndex="rowIndex">
+                    <ng-container formArrayName="planDetail">
+                      <tr [formGroupName]="subIndex">
+                        <td class="w-5rem"></td>
+                        <td>
+                          <input pInputText type="text" class="form-control form-control-sm" formControlName="name" />
+                        </td>
+                        <td>
+                          <p-dropdown [options]="['In Progress', 'Finished', 'Approved']" class="front" formControlName="state"
+                            placeholder="Select a State" />
+                        </td>
+                        <td>
+                          <p-button icon="pi pi-trash" type="button" [rounded]="true" [text]="true" [raised]="true"
+                            severity="danger" (click)="deleteSecondLevelDetail(rowIndex, subIndex)" />
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </ng-template>
+                </p-table>
+              </td>
+            </tr>
+          </ng-container>
+        </ng-template>
+      </p-table>
+    </div>
+  </form>
+</div>

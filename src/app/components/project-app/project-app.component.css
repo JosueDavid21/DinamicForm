@@ -1,0 +1,6 @@
+
+@layer primeng {
+    .p-datatable > .p-datatable-wrapper {
+      overflow: visible !important;
+    }
+  }
